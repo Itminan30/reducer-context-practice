@@ -1,7 +1,10 @@
 /* eslint-disable react/prop-types */
+import { useContext } from "react";
 import Task from "./Task";
+import { TaskContext } from "../App";
 
-const TaskList = ({tasks, onEditTask, onDeleteTask}) => {
+const TaskList = ({ onEditTask, onDeleteTask}) => {
+    const tasks = useContext(TaskContext);
     return (
         <>
             <ul>

@@ -1,8 +1,10 @@
-import { useState } from 'react'
+import { createContext, useState } from 'react'
 import './App.css'
 import AddTask from './Components/AddTask'
 import TaskList from './Components/TaskList'
 import { initialTasks } from './Data/taskData'
+
+export const TaskContext = createContext(initialTasks);
 
 function App() {
   const [tasks, setTasks] = useState(initialTasks);
@@ -28,12 +30,13 @@ function App() {
     setTasks(tasks.filter(t => t.id !== taskId))
   }
   return (
-    <>
+    <TaskContext.Provider value={tasks}>
       <h1>Prague Itinerary</h1>
       <AddTask onAddTask={handleAddTask} />
-      <TaskList tasks={tasks} onEditTask={handleEditTask} onDeleteTask={handleDeleteTask} />
-    </>
+      <TaskList onEditTask={handleEditTask} onDeleteTask={handleDeleteTask} />
+    </TaskContext.Provider>
   )
 }
+
 
 export default App
