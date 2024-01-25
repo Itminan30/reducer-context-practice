@@ -1,14 +1,29 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
-const Task = ({ task, onEditTask, onDeleteTask }) => {
+import { useTaskDispatch } from "../Context/TasksContextProvider";
+const Task = ({ task }) => {
     const [editing, setEditing] = useState(false);
     const [inputText, setInputText] = useState(task.text);
+    const taskDispatch = useTaskDispatch();
     let taskContent;
     if (editing) {
         taskContent = (
             <>
                 <input value={inputText} onChange={(e) => { setInputText(e.target.value) }} />
-                <button onClick={() => { setEditing(false); onEditTask({...task, text:inputText}); }}>Save</button>
+                <button
+                    onClick={() => {
+                        setEditing(false);
+                        taskDispatch({
+                            type: "edited",
+                            task: {
+                                ...task,
+                                text: inputText,
+                            }
+                        });
+                    }}
+                >
+                    Save
+                </button>
             </>
         )
     }
@@ -23,9 +38,30 @@ const Task = ({ task, onEditTask, onDeleteTask }) => {
     return (
         <li>
             <label htmlFor="">
-                <input type="checkbox" checked={task.done} onChange={(e) => onEditTask({...task, done: e.target.checked})} />
+                <input
+                    type="checkbox"
+                    checked={task.done}
+                    onChange={(e) => {
+                        taskDispatch({
+                            type: "edited",
+                            task: {
+                                ...task,
+                                done: e.target.checked
+                            }
+                        });
+                    }}
+                />
                 {taskContent}
-                <button onClick={() => onDeleteTask(task.id)}>Delete</button>
+                <button
+                    onClick={() => {
+                        taskDispatch({
+                            type: "deleted",
+                            taskId: task.id,
+                        });
+                    }}
+                >
+                    Delete
+                </button>
             </label>
         </li>
     );

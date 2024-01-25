@@ -4,7 +4,11 @@ export function taskReducer(state, action) {
             return (
                 [
                     ...state,
-                    action.task
+                    {
+                        id: action.id,
+                        text: action.text,
+                        done: false
+                    }
                 ]
             )
         }
